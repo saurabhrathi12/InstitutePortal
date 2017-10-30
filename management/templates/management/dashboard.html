@@ -1,0 +1,133 @@
+{% extends 'management/base.html' %}
+{% block content %}
+<div style="background-color: #ddd;">
+	<div class="jumbotron text-center">
+	  <h1>Rathi Coaching Classes</h1>
+	  <p>Shivaji Colony, Akola Road, Akot- 444101</p> 
+	  <h2>Management</h2>
+	  <button class="btn btn-default" type="submit" ><a href="/mlogout">Log Out</a></button>
+	</div>
+</div>
+	<h2>Students</h2>
+	  <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Student Id</th>
+              <th>Name</th>
+              <th>Mobile</th>
+              <th>DateOfBirth</th>
+              <th>Address</th>
+              <th>Father's Name</th>
+              <th>Mother's Name</th>
+              <th>Standard</th>
+              <th>School</th>
+              <th></th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for row in student %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{row.0}}</td>
+              <td>{{row.1}}</td>
+              <td>{{row.2}}</td>
+              <td>{{row.3}}</td>
+              <td>{{row.4}}</td>
+              <td>{{row.5}}</td>
+              <td>{{row.6}}</td>
+              <td>{{row.7}}</td>
+              <td>{{row.8}}</td>
+              <td><button class="btn btn-default" type="submit" ><a href="{% url 'deletestudent' pk=row.0 %}">Delete</a></button></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    <h2>Teachers</h2>
+	  <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Teacher Id</th>
+              <th>Name</th>
+              <th>Mobile</th>
+              <th>DateOfBirth</th>
+              <th>Address</th>
+              <th></th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for row in teacher %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{row.0}}</td>
+              <td>{{row.1}}</td>
+              <td>{{row.2}}</td>
+              <td>{{row.3}}</td>
+              <td>{{row.4}}</td>
+              <td><button class="btn btn-default" type="submit" ><a href="{% url 'deleteteacher' pk=row.0 %}">Delete</a></button></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    <h2>Classroom</h2>
+	  <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Classroom Id</th>
+              <th>Hall Name</th>
+              <th>Capacity</th>
+              <th></th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for row in classroom %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{row.0}}</td>
+              <td>{{row.1}}</td>
+              <td>{{row.2}}</td>
+              <td><button class="btn btn-default" type="submit" ><a href="{% url 'deleteclassroom' pk=row.0 %}">Delete</a></button></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    <h2>Batch</h2>
+	  <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Batch Id</th>
+              <th>Standard</th>
+              <th>Subject</th>
+              <th>Teacher Name</th>
+              <th>ClassRoom Name</th>
+              <th>Fee</th>
+              <th></th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for row in batch %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{row.0}}</td>
+              <td>{{row.1}}</td>
+              <td>{{row.2}}</td>
+              <td>{{row.3}}</td>
+              <td>{{row.5}}</td>
+              <td>{{row.6}}</td>
+              <td><button class="btn btn-default" type="submit" ><a href="{% url 'deletebatch' pk=row.0 %}">Delete</a></button></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+{% endblock %}

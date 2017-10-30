@@ -88,12 +88,12 @@
 				  <div class="modal-body">
 					<form class="form-signin" role="form" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
 					  <input type="text" name="name" class="form-control" placeholder="Name" required>
-					  <input type="text" name="standard" class="form-control" placeholder="Class" required>
+					  <input type="number" name="standard" class="form-control" placeholder="Class" required>
 					  <input type="text" name="school" class="form-control" placeholder="School" required>
-					  <input type="text" name="dateofbirth" class="form-control" placeholder="DateOfBirth(DDMMYYYY)" required>
+					  <input type="number" name="dateofbirth" class="form-control" placeholder="DateOfBirth(DDMMYYYY)" required>
 					  <input type="text" name="father_name" class="form-control" placeholder="Father's Name" required>
 					  <input type="text" name="mother_name" class="form-control" placeholder="Mother's Name" required>
-					  <input type="text" name="mobile" class="form-control" placeholder="Mobile" required>
+					  <input type="number" name="mobile" class="form-control" placeholder="Mobile" required>
 					  <input type="text" name="address" class="form-control" placeholder="Address" required>
 					  <button class="btn btn-lg btn-primary btn-block" type="submit">Admit</button>
 					</form>

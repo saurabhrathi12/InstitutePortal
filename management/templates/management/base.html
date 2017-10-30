@@ -1,0 +1,27 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Rathi Coaching Classes</title>
+	<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+	<link href="{% static 'css/signin.css' %}" rel="stylesheet">
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+</head>
+
+<body>
+	{% block content %}
+	{% endblock %}
+</body>
+
+
+<footer class="container-fluid bg-4 text-center" style="background-color: lightblue; bottom: 0px; left: 0px; right: 0px; margin-bottom: 0px;">
+  <p>©2017-18 | Rathi Coaching Classes Pvt Limited | All Rights Reserved </p>
+  <p>Website made by Saurabh Rathi</p> 
+</footer>
+
+</html>

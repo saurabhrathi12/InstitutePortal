@@ -1,0 +1,25 @@
+{% extends 'management/base.html' %}
+{% block content %}
+<div style="background-color: #ddd;">
+	<div class="jumbotron text-center">
+	  <h1>Rathi Coaching Classes</h1>
+	  <p>Shivaji Colony, Akola Road, Akot- 444101</p> 
+	</div>
+	<div class="container">
+	  <div class="row">
+	    <div class="col-sm-3"></div>
+	    <div class="col-sm-6">
+	      <center>
+		      <form class="form-signin" role="form" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+		        <h2 class="form-signin-heading">Management Sign In</h2>
+			    <input type="text" name="username" class="form-control" placeholder="Username" required>
+		        <input type="password" name="password" class="form-control" placeholder="Password" required>
+		        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+		      </form>
+	      </center>
+	    </div>
+	    <div class="col-sm-3"></div>
+	  </div>
+	</div>
+</div>
+{% endblock %}

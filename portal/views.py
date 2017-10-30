@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 import MySQLdb
 import datetime
-# Create your views here.
 
 db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
 cur=db.cursor()
