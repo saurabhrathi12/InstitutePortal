@@ -1,0 +1,39 @@
+{% extends 'portal/base.html' %}
+{% block content %}
+<div style="background-color: #ddd;">
+	<div class="jumbotron text-center">
+	  <h1>Rathi Coaching Classes</h1>
+	  <p>Shivaji Colony, Akola Road, Akot- 444101</p> 
+	</div>
+	<div class="container">
+	  <div class="row">
+	    <div class="col-sm-6">
+	      <center>
+		      <form class="form-signin" role="form" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+		        <h2 class="form-signin-heading">Student Sign In</h2>
+			    <input type="text" name="student_id" class="form-control" placeholder="Student Id" required autofocus>
+			    <input type="password" name="dateofbirth" class="form-control" placeholder="Date Of Birth(DDMMYYYY)" required>
+		        <div class="checkbox">
+		          <label><input type="checkbox" value="remember-me"> Remember me</label>
+		        </div>
+		        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+		      </form>
+	      </center>
+	    </div>
+	    <div class="col-sm-6">
+	      <center>
+		      <form class="form-signin" role="form" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+		        <h2 class="form-signin-heading">Teacher Sign In</h2>
+			    <input type="text" name="teacher_id" class="form-control" placeholder="Teacher Id" required>
+		        <input type="password" name="password" class="form-control" placeholder="Password" required>
+		        <div class="checkbox">
+		          <label><input type="checkbox" value="remember-me"> Remember me</label>
+		        </div>
+		        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+		      </form>
+	      </center>
+	    </div>
+	  </div>
+	</div>
+</div>
+{% endblock %}

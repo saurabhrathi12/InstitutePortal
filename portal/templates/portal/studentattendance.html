@@ -1,0 +1,39 @@
+{% extends 'portal/base.html' %}
+{% block content %}
+	<div class="jumbotron text-center">
+	  <h2>Rathi Coaching Classes, Akot</h2>
+	  <p>Student Attendance Details - {{name}}</p>
+	  <button class="btn btn-default" type="submit"><a href="{% url 'student_dashboard'%}">Dashboard</a></button>
+	  <button class="btn btn-default" type="submit"><a href="/logout">Log Out</a></button>
+	</div>
+	<div class="container">
+	  <div class="row">
+	 	<div class="col-sm-3">	 	</div>
+	 	<div class="col-sm-6">
+	 		<h2 class="sub-header"><center>Roll No: {{student_id}}</center></h2>
+	 		<h2 class="sub-header"><center>Batch: {{standard}}th {{subject}}</center></h2>
+	 		<div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Date</th>
+                  <th>Attendance</th>
+                  </tr>
+              </thead>
+              <tbody>
+                {% for row in attendance %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{row.0}}</td>
+                  <td>{{row.1}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+	 	</div>
+	 	<div class="col-sm-3">	 	</div>
+	  </div>
+	</div>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends 'portal/base.html' %}
+{% block content %}
+	<div class="jumbotron text-center">
+	  <h2>Rathi Coaching Classes, Akot</h2>
+	  <p>Teacher Dashboard - {{ teacher.2 }}</p>
+	  <button class="btn btn-default" type="submit" align="right"><a href="/logout">Log Out</a></button>
+	</div>
+	<div class="container">
+	  <div class="row">
+		<div class="col-sm-3">	 	</div>
+		<div class="col-sm-6">
+			<div class="panel panel-default">
+				<div class="panel-heading"><h2><center>Personal Details</center></h2></div>
+				<div class="panel-body">
+					<p> Name: {{teacher.2}} </p>
+					<p> Id: {{ teacher.0 }} </p>
+					<p> Date Of Birth: {{teacher.4}} </p>
+					<p> Mobile: {{teacher.3}} </p>
+					<p> Address: {{teacher.5}} </p>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-3">	 	</div>
+	  </div>
+	</div>
+	<div class="container">
+	  <div class="row">
+		<div class="col-sm-2">	 	</div>
+		<div class="col-sm-8">
+			<h2 class="sub-header"><center>Current Batches</center></h2>
+			<div class="table-responsive">
+			<table class="table table-striped">
+			  <thead>
+				<tr>
+				  <th>#</th>
+				  <th>Batch</th>
+				  <th>Attendance</th>
+				  <th>Fee Details</th>
+				  <th>Discussion</th>
+				</tr>
+			  </thead>
+			  <tbody>
+				{% for row in batch %}
+				<tr>
+				  <td>{{ forloop.counter }}</td>
+				  <td>
+					<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">{{row.1}}th {{row.2}}</button>
+					  <div class="modal fade" id="myModal" role="dialog">
+						<div class="modal-dialog modal-lg">
+						  <div class="modal-content">
+							<div class="modal-header">
+							  <button type="button" class="close" data-dismiss="modal">&times;</button>
+							  <h4 class="modal-title">{{row.1}}th {{row.2}}</h4>
+							</div>
+							<div class="modal-body">
+							  <p>No of students enrolled: {{row.5}}</p>
+							  <h3>Class Timings: </h3>
+							  {% for x in row.4 %}
+					          <p>{{x.0}} {{x.1}}-{{x.2}}</p>
+					          {% endfor %}
+							  <h3>Venue: </h3>
+							  <p>{{row.3}}</p>
+							</div>
+							<div class="modal-footer">
+							  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							</div>
+						  </div>
+						</div>
+					  </div>
+				  </td>
+				  <td><a href="{% url 'teacher_attendance' pk=row.0 %}">Link</a></td>
+				  <td><a href="{% url 'teacher_fee' pk=row.0 %}">Link</a></td>
+				  <td><a href="{% url 'discussion' pk=row.0 %}">Link</a></td>
+				</tr>
+				{% endfor %}
+			  </tbody>
+			</table>
+		  </div>
+		  <center>
+		  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal3"> Add Student to database</button>
+			<div class="modal fade" id="myModal3" role="dialog">
+			  <div class="modal-dialog modal-lg">
+				<div class="modal-content">
+				  <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Add Student</h4>
+				  </div>
+				  <div class="modal-body">
+					<form class="form-signin" role="form" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+					  <input type="text" name="name" class="form-control" placeholder="Name" required>
+					  <input type="text" name="standard" class="form-control" placeholder="Class" required>
+					  <input type="text" name="school" class="form-control" placeholder="School" required>
+					  <input type="text" name="dateofbirth" class="form-control" placeholder="DateOfBirth(DDMMYYYY)" required>
+					  <input type="text" name="father_name" class="form-control" placeholder="Father's Name" required>
+					  <input type="text" name="mother_name" class="form-control" placeholder="Mother's Name" required>
+					  <input type="text" name="mobile" class="form-control" placeholder="Mobile" required>
+					  <input type="text" name="address" class="form-control" placeholder="Address" required>
+					  <button class="btn btn-lg btn-primary btn-block" type="submit">Admit</button>
+					</form>
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				  </div>
+				</div>
+			  </div>
+			</div>
+		  </center>
+		</div>
+		<div class="col-sm-2">	 	</div>
+	  </div>
+	</div>
+{% endblock %}

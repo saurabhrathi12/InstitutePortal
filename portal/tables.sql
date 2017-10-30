@@ -1,0 +1,38 @@
+drop database institute;
+create database institute;
+use institute;
+drop table if exists student;
+drop table if exists teacher;
+drop table if exists batch;
+drop table if exists discussion_page;
+drop table if exists classroom;
+drop table if exists time_slot;
+drop table if exists batch_timeslot;
+drop table if exists joins;
+drop table if exists comment;
+drop table if exists attendance;
+drop table if exists fee;
+create table student(student_id int not null auto_increment primary key, name char(100), mobile char(10), dateofbirth char(8) not null, address char(100), father_name char(100), mother_name char(100), standard int, school char(100));
+create table teacher(teacher_id int not null auto_increment primary key, password char(100) not null, name char(100), mobile char(10), dateofbirth char(8), address char(100));
+create table classroom(room_id int not null auto_increment primary key, hall_name char(100), capacity int);
+create table batch(batch_id int not null auto_increment primary key, standard int, subject char(100), teacher_id int, foreign key (teacher_id) references teacher(teacher_id), room_id int, foreign key(room_id) references classroom(room_id), fee int);
+create table discussion_page(page_id int not null auto_increment primary key, batch_id int, foreign key (batch_id) references batch(batch_id));
+create table time_slot(timeslot_id int not null auto_increment primary key, day char(10), start_time float, end_time float);
+create table batch_timeslot(batch_id int, foreign key (batch_id) references batch(batch_id), timeslot_id int, foreign key (timeslot_id) references time_slot(timeslot_id), primary key(batch_id,timeslot_id));
+create table joins(student_id int, foreign key (student_id) references student(student_id),batch_id int, foreign key (batch_id) references batch(batch_id), primary key(student_id,batch_id));
+create table comment(comment_id int auto_increment primary key, batch_id int, foreign key (batch_id) references batch(batch_id), statement text, name char(100), timedate datetime);
+create table attendance(student_id int, foreign key (student_id) references student(student_id), batch_id int, foreign key (batch_id) references batch(batch_id), dateofclass char(8), record char(1), primary key(student_id, batch_id, dateofclass));
+create table fee(receipt_id int not null auto_increment primary key, amount int, dateofdeposit date, student_id int, foreign key (student_id) references student(student_id), batch_id int, foreign key (batch_id) references batch(batch_id));
+
+
+insert into student(name,mobile,dateofbirth,address,father_name,mother_name,standard,school) values('saurabh','1234','24081997','shivaji','bhagirath','sarla',10,'saintpaul');
+insert into teacher(password, name, mobile, dateofbirth, address) values('qwerty12', 'bhagirath', '1234', '19091963', 'shivaji');
+insert into classroom(hall_name,capacity) values('gf hall', 120);
+insert into batch(standard, subject, teacher_id, room_id, fee) values(10, 'Maths', 1, 1, 1000);
+insert into discussion_page(batch_id) values(1);
+insert into joins(student_id, batch_id) values(1,1);
+insert into time_slot(day, start_time, end_time) values('MON',8,9);
+insert into batch_timeslot(batch_id,timeslot_id) values(1,1);
+insert into attendance(student_id, batch_id, dateofclass, record) values (1,1,'2017-08-15','A');
+insert into fee(amount,dateofdeposit,student_id,batch_id) values(1000, '2017-07-01',1,1);
+insert into comment(batch_id, statement, name, timedate) values(1,'Why speed of light is 3*10^8 m/s', 'Saurabh Rathi' , now());

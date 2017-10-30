@@ -1,0 +1,111 @@
+{% extends 'portal/base.html' %}
+{% block content %}
+  <div class="jumbotron text-center">
+    <h2>Rathi Coaching Classes, Akot</h2>
+    <p>Teacher Attendance Update - {{teacher.2}}</p>
+    <button class="btn btn-default" type="submit"><a href="{% url 'teacher_dashboard'%}">Dashboard</a></button>
+    <button class="btn btn-default" type="submit"><a href="/logout">Log Out</a></button>
+  </div>
+	<div class="container">
+	  <div class="row">
+	 	<div class="col-sm-2">	 	</div>
+	 	<div class="col-sm-8">
+	 		<h2 class="sub-header"><center>Batch: {{standard}}th {{subject}}</center></h2>
+      <h3 class="sub-header"><center>Total Fee: {{totalfee}}</center></h3>
+      <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Roll No</th>
+                  <th>Name</th>
+                  <th>Amount Deposited</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in fee %}
+                <tr>
+                  <td>{{forloop.counter}}</td>
+                  <td>{{row.0}}</td>
+                  <td>{{row.1}}</td>
+                  <td>{{row.2}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+	 	</div>
+	 	<div class="col-sm-2">	 	</div>
+	  </div>
+	</div>
+  
+  <center>
+
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Receive Fee Payment</button>
+    <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Receive Fee Payment</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-signin" role="form" action="{% url 'teacher_fee' pk=id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+              <input type="number" name="payid" class="form-control" placeholder="Student Roll No" required>
+              <input type="number" name="amount" class="form-control" placeholder="Amount" required>
+              <button class="btn btn-lg btn-primary btn-block" type="submit">Update</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal2"> Enroll Student</button>
+    <div class="modal fade" id="myModal2" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Enroll Student</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-signin" role="form" action="{% url 'teacher_fee' pk=id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+              <input type="number" name="enrollid" class="form-control" placeholder="Student Roll No" required>
+              <input type="number" name="enrollamount" class="form-control" placeholder="Amount" required>
+              <button class="btn btn-lg btn-primary btn-block" type="submit">Enroll</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal3"> Remove Student</button>
+    <div class="modal fade" id="myModal3" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Remove Student</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-signin" role="form" action="{% url 'teacher_fee' pk=id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+              <input type="number" name="removeid" class="form-control" placeholder="Student Roll No" required>
+              <button class="btn btn-lg btn-primary btn-block" type="submit">Remove</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </center>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'portal/base.html' %}
+{% block content %}
+	<div class="jumbotron text-center">
+	  <h2>Rathi Coaching Classes, Akot</h2>
+	  <p>Teacher Attendance Update - {{teacher.2}}</p>
+	  <button class="btn btn-default" type="submit"><a href="{% url 'teacher_dashboard'%}">Dashboard</a></button>
+	  <button class="btn btn-default" type="submit"><a href="/logout">Log Out</a></button>
+	</div>
+	<div class="container">
+	  <div class="row">
+	 	<div class="col-sm-2">	 	</div>
+	 	<div class="col-sm-8">
+      <h2 class="sub-header"><center>Batch: {{standard}}th {{subject}}</center></h2>
+      <form role="form" action="{% url 'teacher_attendance' pk=id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+      <label for="date">Date of Attendance (DDMMYYYY)</label>
+      <input type="date" name="date" class="form-control" required autofocus>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Roll No</th>
+              <th>Name</th>
+              <th>Present/Absent</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for row in attendance %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{row.0}}</td>
+              <td>{{row.1}}</td>
+              <td>
+                <select class="form-control" name={{forloop.counter}}>
+                  <option>Present</option>
+                  <option>Absent</option>
+                </select>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <center>
+        <button class="btn btn-primary" type="submit">Submit</button>
+      </center>
+      </form>
+	 	</div>
+	 	<div class="col-sm-2">	 	</div>
+	  </div>
+	</div>
+{% endblock %}

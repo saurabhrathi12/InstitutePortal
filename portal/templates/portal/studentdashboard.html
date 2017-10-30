@@ -1,0 +1,90 @@
+{% extends 'portal/base.html' %}
+{% block content %}
+	<div class="jumbotron text-center">
+	  <h2>Rathi Coaching Classes, Akot</h2>
+	  <p>Student Dashboard - {{student.1}}</p>
+	  <button class="btn btn-default" type="submit"><a href="/logout">Log Out</a></button>
+	</div>
+	<div class="container">
+	  <div class="row">
+	 	<div class="col-sm-3">	 	</div>
+	 	<div class="col-sm-6">
+	 		<div class="panel panel-default">
+  				<div class="panel-heading"><h2><center>Personal Details</center></h2></div>
+  				<div class="panel-body">
+			 		<p> Name: {{ student.1 }} </p>
+			 		<p> Roll No: {{ student.0 }} </p>
+			 		<p> Date Of Birth: {{student.3}} </p>
+			 		<p> Class: {{student.7}}</p>
+			 		<p> School: {{student.8}}</p>
+			 		<p> Father's Name: {{student.5}} </p>
+			 		<p> Mother's Name: {{student.6}} </p>
+			 		<p> Mobile: {{student.2}} </p>
+			 		<p> Address: {{student.4}}</p>
+			 	</div>
+	 		</div>
+	 	</div>
+	 	<div class="col-sm-3">	 	</div>
+	  </div>
+	</div>
+	<div class="container">
+	  <div class="row">
+	 	<div class="col-sm-2">	 	</div>
+	 	<div class="col-sm-8">
+	 		<h2 class="sub-header"><center>Batches Enrolled</center></h2>
+	 		<div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Batch</th>
+                  <th>Attendance</th>
+                  <th>Fee Details</th>
+                  <th>Discussion</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in batch %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>
+                  	<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">{{row.1}}th {{row.2}}</button>
+					  <div class="modal fade" id="myModal" role="dialog">
+					    <div class="modal-dialog modal-lg">
+					      <div class="modal-content">
+					        <div class="modal-header">
+					          <button type="button" class="close" data-dismiss="modal">&times;</button>
+					          <h4 class="modal-title">{{row.1}}th {{row.2}}</h4>
+					        </div>
+					        <div class="modal-body">
+					          <h3>Teacher details: </h3>
+					          <p>Name: {{row.4}}</p>
+					          <p>Contact: {{row.5}}</p>
+					          <p>Address: {{row.6}}</p>
+					          <h3>Class Timings: </h3>
+					          {% for x in row.8 %}
+					          <p>{{x.0}} {{x.1}}-{{x.2}}</p>
+					          {% endfor %}
+					          <h3>Venue: </h3>
+					          <p>{{row.7}}</p>
+					        </div>
+					        <div class="modal-footer">
+					          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					        </div>
+					      </div>
+					    </div>
+					  </div>
+                  </td>
+                  <td><a href="{% url 'student_attendance' pk=row.0 %}">Link</a></td>
+                  <td><a href="{% url 'student_fee' pk=row.0 %}">Link</a></td>
+                  <td><a href="{% url 'discussion' pk=row.0 %}">Link</a></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+	 	</div>
+	 	<div class="col-sm-2">	 	</div>
+	  </div>
+	</div>
+{% endblock %}

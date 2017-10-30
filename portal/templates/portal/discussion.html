@@ -1,0 +1,37 @@
+{% extends 'portal/base.html' %}
+{% block content %}
+	<div class="jumbotron text-center">
+	  <h2>Rathi Coaching Classes, Akot</h2>
+	  <p>Discussion Forum - {{name}}</p>
+	  <button class="btn btn-default" type="submit"><a href="{% url 'login'%}">Dashboard</a></button>
+	  <button class="btn btn-default" type="submit"><a href="/logout">Log Out</a></button>
+	</div>
+	<div class="container">
+    <h2 class="sub-header"><center>Discussion Page Batch: {{standard}}th {{subject}}</center></h2>
+    {% for row in comment %}
+    <blockquote>
+      <span style="font-size:1em;line-height:1.4em;">{{row.2}}</span>
+      <br>
+      <br>
+      <b>{{row.3}}</b>, {{row.4}}
+    </blockquote>
+    {% endfor %}
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-3"> </div>
+      <div class="col-sm-6">
+      <center>
+        <form role="form" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+          <div class="form-group">
+            <label for="comment">Ask:</label>
+            <textarea class="form-control" rows="5" name="statement"></textarea>
+            <button type="submit" class="btn btn-primary ">Submit</button>
+          </div>
+        </form>
+      </center>
+      </div>
+      <div class="col-sm-3"> </div>
+    </div>
+  </div>
+{% endblock %}
