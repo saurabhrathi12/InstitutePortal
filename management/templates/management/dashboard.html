@@ -8,7 +8,37 @@
 	  <button class="btn btn-default" type="submit" ><a href="/mlogout">Log Out</a></button>
 	</div>
 </div>
-	<h2>Students</h2>
+
+
+	<h2>Students
+	<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#1">Add Student</button>
+		<div class="modal fade" id="1" role="dialog">
+		<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Add Student</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-signin" role="form" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+					<input type="text" name="name" class="form-control" placeholder="Name" required>
+					<input type="number" name="standard" class="form-control" placeholder="Class" required>
+					<input type="text" name="school" class="form-control" placeholder="School" required>
+					<input type="number" name="dateofbirth" class="form-control" placeholder="DateOfBirth(DDMMYYYY)" required>
+					<input type="text" name="father_name" class="form-control" placeholder="Father's Name" required>
+					<input type="text" name="mother_name" class="form-control" placeholder="Mother's Name" required>
+					<input type="number" name="mobile" class="form-control" placeholder="Mobile" required>
+					<input type="text" name="address" class="form-control" placeholder="Address" required>
+	  				<button class="btn btn-lg btn-primary btn-block" type="submit">Admit</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+		</div>
+		</div>
+	</h2>
 	  <div class="table-responsive">
         <table class="table table-striped">
           <thead>
@@ -45,7 +75,35 @@
           </tbody>
         </table>
       </div>
-    <h2>Teachers</h2>
+
+
+
+	<h2>Teachers
+	<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#2">Add Teacher</button>
+		<div class="modal fade" id="2" role="dialog">
+		<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Add Teacher</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-signin" role="form" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+					<input type="password" name="password2" class="form-control" placeholder="Password" required>
+					<input type="text" name="name2" class="form-control" placeholder="Name" required>
+					<input type="number" name="mobile2" class="form-control" placeholder="Mobile" required>
+					<input type="date" name="dateofbirth2" class="form-control" placeholder="DateOfBirth(DDMMYYYY)" required>
+					<input type="text" name="address2" class="form-control" placeholder="Address" required>
+	  				<button class="btn btn-lg btn-primary btn-block" type="submit">Add</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+		</div>
+		</div>
+	</h2>
 	  <div class="table-responsive">
         <table class="table table-striped">
           <thead>
@@ -64,17 +122,42 @@
             <tr>
               <td>{{ forloop.counter }}</td>
               <td>{{row.0}}</td>
-              <td>{{row.1}}</td>
               <td>{{row.2}}</td>
               <td>{{row.3}}</td>
               <td>{{row.4}}</td>
+              <td>{{row.5}}</td>
               <td><button class="btn btn-default" type="submit" ><a href="{% url 'deleteteacher' pk=row.0 %}">Delete</a></button></td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
       </div>
-    <h2>Classroom</h2>
+
+
+
+    <h2>Classroom
+	<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#3">Add Classroom</button>
+		<div class="modal fade" id="3" role="dialog">
+		<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Add Classroom</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-signin" role="form" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+					<input type="text" name="name3" class="form-control" placeholder="Hall Name" required>
+					<input type="number" name="capacity3" class="form-control" placeholder="Capacity" required>
+	  				<button class="btn btn-lg btn-primary btn-block" type="submit">Add</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+		</div>
+		</div>
+	</h2>
 	  <div class="table-responsive">
         <table class="table table-striped">
           <thead>
@@ -99,7 +182,35 @@
           </tbody>
         </table>
       </div>
-    <h2>Batch</h2>
+
+
+
+    <h2>Batch
+	<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#4">Add Batch</button>
+		<div class="modal fade" id="4" role="dialog">
+		<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Add Batch</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-signin" role="form" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+					<input type="text" name="standard4" class="form-control" placeholder="Class" required>
+					<input type="text" name="subject4" class="form-control" placeholder="Subject" required>
+					<input type="number" name="fee4" class="form-control" placeholder="Fee" required>
+					<input type="number" name="teacherid4" class="form-control" placeholder="Teacher Id" required>
+					<input type="number" name="roomid4" class="form-control" placeholder="Class Room Id" required>									
+	  				<button class="btn btn-lg btn-primary btn-block" type="submit">Add</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+		</div>
+		</div>
+	</h2>
 	  <div class="table-responsive">
         <table class="table table-striped">
           <thead>
@@ -130,4 +241,285 @@
           </tbody>
         </table>
       </div>
+
+
+
+    <h2>Time Slot
+	<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#5">Add Time Slot</button>
+		<div class="modal fade" id="5" role="dialog">
+		<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Add Time Slot</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-signin" role="form" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+					<input type="text" name="day5" class="form-control" placeholder="Day" required>
+					<input type="number" step="0.01" name="start5" class="form-control" placeholder="Start Time" required>
+					<input type="number" step="0.01" name="end5" class="form-control" placeholder="End Time" required>
+					<button class="btn btn-lg btn-primary btn-block" type="submit">Add</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+		</div>
+		</div>
+	</h2>
+	  <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Time Slot Id</th>
+              <th>Day</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for row in time_slot %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{row.0}}</td>
+              <td>{{row.1}}</td>
+              <td>{{row.2}}</td>
+              <td>{{row.3}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+
+
+    <h2>Joins(Student-Batch)
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#6">Add</button>
+		<div class="modal fade" id="6" role="dialog">
+		<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Add in Joins</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-signin" role="form" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+					<input type="number" name="studentid6" class="form-control" placeholder="Student Id" required>
+					<input type="number" name="batchid6" class="form-control" placeholder="Batch Id" required>
+					<input type="number" name="fee6" class="form-control" placeholder="Initial Deposit Fee" required>
+	  				<button class="btn btn-lg btn-primary btn-block" type="submit">Add</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+		</div>
+		</div>
+    </h2>
+	  <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Student Id</th>
+              <th>Batch Id</th>
+              <th>Student Name</th>
+              <th>Teacher Name</th>
+              <th>Subject</th>
+              <th>Standard</th>
+              <th>Fee</th>
+              <th></th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for row in joins %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{row.0}}</td>
+              <td>{{row.1}}</td>
+              <td>{{row.2}}</td>
+              <td>{{row.3}}</td>
+              <td>{{row.4}}</td>
+              <td>{{row.5}}</td>
+              <td>{{row.6}}</td>
+              <td><button class="btn btn-default" type="submit" ><a href="{% url 'deletejoins' pk=row.0 qk=row.1 %}">Delete</a></button></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+
+
+    <h2>Batch-Timeslots
+	<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#7">Add</button>
+		<div class="modal fade" id="7" role="dialog">
+		<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Add Timeslot for Batch</h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-signin" role="form" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+					<input type="number" name="batchid7" class="form-control" placeholder="Batch Id" required>
+					<input type="number" name="timeslotid7" class="form-control" placeholder="TimeSlot Id" required>
+	  				<button class="btn btn-lg btn-primary btn-block" type="submit">Add</button>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+		</div>
+		</div>
+    </h2>
+	  <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Batch Id</th>
+              <th>Timeslot Id</th>
+              <th>Standard</th>
+              <th>Subject</th>
+              <th>Day</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+              <th></th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for row in batch_timeslot %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{row.0}}</td>
+              <td>{{row.1}}</td>
+              <td>{{row.2}}</td>
+              <td>{{row.3}}</td>
+              <td>{{row.4}}</td>
+              <td>{{row.5}}</td>
+              <td>{{row.6}}</td>
+              <td><button class="btn btn-default" type="submit" ><a href="{% url 'deletebatchtimeslot' pk=row.0 qk=row.1 %}">Delete</a></button></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+
+
+    <h2>Attendance</h2>
+	  <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Batch Id</th>
+              <th>Student Id</th>
+              <th>Standard</th>
+              <th>Subject</th>
+              <th>Student Name</th>
+              <th>Date Of Class</th>
+              <th>Record</th>
+              <th></th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for row in attendance %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{row.0}}</td>
+              <td>{{row.1}}</td>
+              <td>{{row.2}}</td>
+              <td>{{row.3}}</td>
+              <td>{{row.4}}</td>
+              <td>{{row.5}}</td>
+              <td>{{row.6}}</td>
+              <td><button class="btn btn-default" type="submit" ><a href="{% url 'deleteattendance' pk=row.0 qk=row.1 rk=row.5 %}">Delete</a></button></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+
+
+    <h2>Fee</h2>
+	  <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Receipt Id</th>
+              <th>Batch Id</th>
+              <th>Student Id</th>
+              <th>Name</th>
+              <th>Standard</th>
+              <th>Subject</th>
+              <th>Date Of Deposit</th>
+              <th>Amount</th>
+              <th></th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for row in fee %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{row.0}}</td>
+              <td>{{row.1}}</td>
+              <td>{{row.2}}</td>
+              <td>{{row.3}}</td>
+              <td>{{row.4}}</td>
+              <td>{{row.5}}</td>
+              <td>{{row.6}}</td>
+              <td>{{row.7}}</td>
+              <td><button class="btn btn-default" type="submit" ><a href="{% url 'deletefee' pk=row.0 %}">Delete</a></button></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+
+
+	<h2>Comments on discussion page</h2>
+	  <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Comment Id</th>
+              <th>Batch Id</th>
+              <th>Standard</th>
+              <th>Subject</th>
+              <th>Name</th>
+              <th>Statement</th>
+              <th>Date and Time</th>
+              <th></th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for row in comment %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{row.0}}</td>
+              <td>{{row.1}}</td>
+              <td>{{row.2}}</td>
+              <td>{{row.3}}</td>
+              <td>{{row.4}}</td>
+              <td>{{row.5}}</td>
+              <td>{{row.6}}</td>
+              <td><button class="btn btn-default" type="submit" ><a href="{% url 'deletecomment' pk=row.0 %}">Delete</a></button></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+
+
 {% endblock %}

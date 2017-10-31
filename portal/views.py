@@ -4,9 +4,6 @@ from django.contrib import messages
 import MySQLdb
 import datetime
 
-db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-cur=db.cursor()
-
 def start_student_session(request, user_id):
 	request.session["user_mail_id"] = user_id
 	request.session["student"] = user_id
@@ -40,6 +37,8 @@ def stop_user_session(request):
 	return False
 
 def login(request):
+	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
+	cur=db.cursor()
 	if check_if_auth_student(request):
 		return redirect("student_dashboard")
 	if check_if_auth_teacher(request):
@@ -57,6 +56,7 @@ def login(request):
 			if str(person[0])==student_id:
 				if person[1]==str(dateofbirth):
 					start_student_session(request,student_id)
+					messages.success(request,"Sucessful Login")
 					return redirect("student_dashboard")
 				else:
 					return render(request, 'portal/login.html')
@@ -83,6 +83,8 @@ def logout(request):
 	return redirect("login")
 
 def student_dashboard(request):
+	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
+	cur=db.cursor()
 	check = check_if_auth_student(request)
 	if not check:
 		return redirect("login")
@@ -106,6 +108,8 @@ def student_dashboard(request):
 	return render(request, 'portal/studentdashboard.html', contextdata)
 
 def student_attendance(request,pk):
+	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
+	cur=db.cursor()
 	check = check_if_auth_student(request)
 	if not check:
 		return redirect("login")
@@ -130,6 +134,8 @@ def student_attendance(request,pk):
 	return render(request, 'portal/studentattendance.html',contextdata)
 
 def student_fee(request,pk):
+	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
+	cur=db.cursor()
 	check = check_if_auth_student(request)
 	if not check:
 		return redirect("login")
@@ -160,6 +166,8 @@ def student_fee(request,pk):
 	return render(request, 'portal/studentfee.html',contextdata)
 
 def teacher_dashboard(request):
+	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
+	cur=db.cursor()
 	check = check_if_auth_teacher(request)
 	if not check:
 		return redirect("login")
@@ -198,11 +206,13 @@ def teacher_dashboard(request):
 		query="insert into student(name,mobile,dateofbirth,address,father_name,mother_name,standard,school) values('%s','%s','%s','%s','%s','%s','%d','%s')"%(name,mobile,dateofbirth,address,father_name,mother_name,standard,school)
 		cur.execute(query)
 		db.commit()
-		messages.success(request, "Successfully added")
+		#messages.success(request, "Successfully added")
 
 	return render(request, 'portal/teacherdashboard.html',contextdata)
 
 def teacher_attendance(request,pk):
+	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
+	cur=db.cursor()
 	check = check_if_auth_teacher(request)
 	if not check:
 		return redirect("login")
@@ -242,6 +252,8 @@ def teacher_attendance(request,pk):
 	return render(request, 'portal/teacherattendance.html',contextdata)
 
 def teacher_fee(request,pk):
+	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
+	cur=db.cursor()
 	check = check_if_auth_teacher(request)
 	if not check:
 		return redirect("login")
@@ -294,6 +306,8 @@ def teacher_fee(request,pk):
 	return render(request, 'portal/teacherfee.html',contextdata)
 
 def discussion(request,pk):
+	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
+	cur=db.cursor()
 	check1 = check_if_auth_student(request)
 	check2 = check_if_auth_teacher(request)
 	if not check1 and not check2:
@@ -315,7 +329,7 @@ def discussion(request,pk):
 
 	statement=request.POST.get('statement')
 	if statement:
-		query="insert into comment(batch_id, statement, name, timedate) values('%d','%s', '%s' , now());"%(pk,statement,contextdata['name'])
+		query="insert into comment(page_id, statement, name, timedate) values('%d','%s', '%s' , now());"%(pk,statement,contextdata['name'])
 		cur.execute(query)
 		db.commit()
 	query="SELECT standard,subject FROM batch where batch_id=('%d') " %(pk)
@@ -323,7 +337,7 @@ def discussion(request,pk):
 	ans=cur.fetchall()
 	contextdata['standard']=ans[0][0]
 	contextdata['subject']=ans[0][1]
-	query="SELECT * FROM comment where batch_id=('%d') " %(pk)
+	query="SELECT * FROM comment where page_id=('%d') " %(pk)
 	cur.execute(query)
 	ans=cur.fetchall()
 	contextdata['comment']=ans
