@@ -39,6 +39,27 @@
 	  </div>
 	</div>
   <center>
-    <button class="btn btn-default btn-primary" type="submit">Pay Fee</button>
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#1">Pay Fee</button>
+    <div class="modal fade" id="1" role="dialog">
+    <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Pay Fee</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-signin" role="form" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+          <input type="number" name="amount" class="form-control" placeholder="Amount" required>
+          <input type="email" name="email" class="form-control" placeholder="Email Id" required>
+          <input type="number" name="mobile" class="form-control" placeholder="Mobile" required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Proceed to Pay Fee</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+    </div>
+    </div>
   </center>
 {% endblock %}

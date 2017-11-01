@@ -4,6 +4,17 @@ from django.contrib import messages
 import MySQLdb
 import datetime
 
+from uuid import uuid4
+#from payu_biz.views import make_transaction
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+def connect():
+	#db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
+	db=MySQLdb.connect(host="rathiclasses.mysql.pythonanywhere-services.com",user="rathiclasses",passwd="qwerty123",db="rathiclasses$institute")
+	cur=db.cursor()
+	return db,cur
+
 def start_student_session(request, user_id):
 	request.session["user_mail_id"] = user_id
 	request.session["student"] = user_id
@@ -37,8 +48,7 @@ def stop_user_session(request):
 	return False
 
 def login(request):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	if check_if_auth_student(request):
 		return redirect("student_dashboard")
 	if check_if_auth_teacher(request):
@@ -56,12 +66,10 @@ def login(request):
 			if str(person[0])==student_id:
 				if person[1]==str(dateofbirth):
 					start_student_session(request,student_id)
-					messages.success(request,"Sucessful Login")
+					#messages.success(request,"Sucessful Login")
 					return redirect("student_dashboard")
-				else:
-					return render(request, 'portal/login.html')
-		else:
-			return render(request, 'portal/login.html')
+		messages.error(request,"Wrong username and/or password")
+		return render(request, 'portal/login.html')
 
 	if teacher_id and password:
 		query="SELECT teacher_id, password FROM teacher"
@@ -71,20 +79,19 @@ def login(request):
 			if str(person[0])==teacher_id:
 				if person[1]==str(password):
 					start_teacher_session(request,teacher_id)
+					#messages.success(request,"Sucessful Login")
 					return redirect("teacher_dashboard")
-				else:
-					return render(request, 'portal/login.html')
-		else:
-			return render(request, 'portal/login.html')
+		messages.error(request,"Wrong username and/or password")
+		return render(request, 'portal/login.html')	
 	return render(request, 'portal/login.html')
 
 def logout(request):
 	stop_user_session(request)
+	#messages.success(request,"Logged out successfully")
 	return redirect("login")
 
 def student_dashboard(request):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	check = check_if_auth_student(request)
 	if not check:
 		return redirect("login")
@@ -108,8 +115,7 @@ def student_dashboard(request):
 	return render(request, 'portal/studentdashboard.html', contextdata)
 
 def student_attendance(request,pk):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	check = check_if_auth_student(request)
 	if not check:
 		return redirect("login")
@@ -134,14 +140,13 @@ def student_attendance(request,pk):
 	return render(request, 'portal/studentattendance.html',contextdata)
 
 def student_fee(request,pk):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	check = check_if_auth_student(request)
 	if not check:
 		return redirect("login")
 	check=int(check)
 	pk=int(pk)
-
+	
 	contextdata={}
 	contextdata['student_id']=check
 	query="SELECT name FROM student where student_id=('%d') " %(check)
@@ -163,11 +168,39 @@ def student_fee(request,pk):
 	for i in ans:
 		feepaid=feepaid+i[1]
 	contextdata['feepaid']=feepaid
+	
+	t_id=str(uuid4())
+	amount=request.POST.get('amount')
+	email=request.POST.get('email')
+	mobile=request.POST.get('mobile')
+	if amount and email and mobile:
+		amount=int(amount)
+		if amount<=0:
+			messages.error(request,"Amount must be positive")
+		else:
+			cleaned_data = {
+					'txnid': t_id, 'amount': amount, 'productinfo': pk,
+					'firstname':contextdata['name'], 'email': email, 'udf1': '', 
+					'udf2': '', 'udf3': '', 'udf4': '', 'udf5': '', 'udf6': '', 'udf7': '', 
+					'udf8': '', 'udf9': '', 'udf10': '','phone':mobile
+					}
+			#return make_transaction(cleaned_data)
+
 	return render(request, 'portal/studentfee.html',contextdata)
 
+@csrf_exempt
+def payu_success(request):
+    return JsonResponse(request.POST)
+@csrf_exempt
+def payu_failure(request):
+    return JsonResponse(request.POST)
+@csrf_exempt
+def payu_cancel(request):
+    return JsonResponse(request.POST)
+
+
 def teacher_dashboard(request):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	check = check_if_auth_teacher(request)
 	if not check:
 		return redirect("login")
@@ -211,8 +244,7 @@ def teacher_dashboard(request):
 	return render(request, 'portal/teacherdashboard.html',contextdata)
 
 def teacher_attendance(request,pk):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	check = check_if_auth_teacher(request)
 	if not check:
 		return redirect("login")
@@ -252,8 +284,7 @@ def teacher_attendance(request,pk):
 	return render(request, 'portal/teacherattendance.html',contextdata)
 
 def teacher_fee(request,pk):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	check = check_if_auth_teacher(request)
 	if not check:
 		return redirect("login")
@@ -306,8 +337,7 @@ def teacher_fee(request,pk):
 	return render(request, 'portal/teacherfee.html',contextdata)
 
 def discussion(request,pk):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	check1 = check_if_auth_student(request)
 	check2 = check_if_auth_teacher(request)
 	if not check1 and not check2:

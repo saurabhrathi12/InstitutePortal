@@ -4,6 +4,12 @@ from django.contrib import messages
 import MySQLdb
 import datetime
 
+def connect():
+	#db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
+	db=MySQLdb.connect(host="rathiclasses.mysql.pythonanywhere-services.com",user="rathiclasses",passwd="qwerty123",db="rathiclasses$institute")
+	cur=db.cursor()
+	return db,cur
+
 def mlogin(request):
 	if request.session.has_key("admin"):
 		return redirect("dashboard")
@@ -18,8 +24,7 @@ def mlogin(request):
 
 
 def dashboard(request):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	if not request.session.has_key("admin"):
 		return redirect("mlogin")
 	contextdata={}
@@ -152,72 +157,63 @@ def dashboard(request):
 	return render(request,'management/dashboard.html',contextdata)
 
 def deletestudent(request,pk):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	query="DELETE FROM student WHERE student_id=('%d')"%(int(pk))
 	cur.execute(query)
 	db.commit()
 	return redirect("dashboard")
 
 def deleteteacher(request,pk):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	query="DELETE FROM teacher WHERE teacher_id=('%d')"%(int(pk))
 	cur.execute(query)
 	db.commit()
 	return redirect("dashboard")
 
 def deleteclassroom(request,pk):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	query="DELETE FROM classroom WHERE classroom_id=('%d')"%(int(pk))
 	cur.execute(query)
 	db.commit()
 	return redirect("dashboard")
 
 def deletebatch(request,pk):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	query="DELETE FROM batch WHERE batch_id=('%d')"%(int(pk))
 	cur.execute(query)
 	db.commit()
 	return redirect("dashboard")
 
 def deletejoins(request,pk,qk):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	query="DELETE FROM joins WHERE student_id=('%d') and batch_id=('%d')"%(int(pk),int(qk))
 	cur.execute(query)
 	db.commit()
 	return redirect("dashboard")
 
 def deletebatchtimeslot(request,pk,qk):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	query="DELETE FROM batch_timeslot WHERE batch_id=('%d') and timeslot_id=('%d')"%(int(pk),int(qk))
 	cur.execute(query)
 	db.commit()
 	return redirect("dashboard")
 
 def deleteattendance(request,pk,qk,rk):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	query="DELETE FROM attendance WHERE batch_id=('%d') and student_id=('%d') and dateofclass=('%s')"%(int(pk),int(qk),str(rk))
 	cur.execute(query)
 	db.commit()
 	return redirect("dashboard")
 
 def deletefee(request,pk):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	query="DELETE FROM fee WHERE receipt_id=('%d')"%(int(pk))
 	cur.execute(query)
 	db.commit()
 	return redirect("dashboard")
 
 def deletecomment(request,pk):
-	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	cur=db.cursor()
+	db,cur=connect()
 	query="DELETE FROM comment where comment_id=('%d')"%(int(pk))
 	cur.execute(query)
 	db.commit()
