@@ -36,3 +36,4 @@ insert into attendance(student_id, batch_id, dateofclass, record) values (1,1,'2
 insert into attendance(student_id, batch_id, dateofclass, record) values (1,1,'2017-08-01','P');
 insert into attendance(student_id, batch_id, dateofclass, record) values (1,1,'2017-08-02','P');
 insert into fee(amount,dateofdeposit,student_id,batch_id) values(200, '2017-08-01',1,1);
+
