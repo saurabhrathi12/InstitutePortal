@@ -3,15 +3,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 import MySQLdb
 import datetime
-
+import hashlib
 from uuid import uuid4
 #from payu_biz.views import make_transaction
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+#from django.http import JsonResponse
+#from django.views.decorators.csrf import csrf_exempt
 
 def connect():
-	#db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	db=MySQLdb.connect(host="rathiclasses.mysql.pythonanywhere-services.com",user="rathiclasses",passwd="qwerty123",db="rathiclasses$institute")
+	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
+	#db=MySQLdb.connect(host="rathiclasses.mysql.pythonanywhere-services.com",user="rathiclasses",passwd="qwerty123",db="rathiclasses$institute")
 	cur=db.cursor()
 	return db,cur
 
@@ -61,25 +61,26 @@ def login(request):
 		query="SELECT student_id, dateofbirth FROM student"
 		cur.execute(query)
 		ans=cur.fetchall()
-		print ans
 		for person in ans:
 			if str(person[0])==student_id:
-				if person[1]==str(dateofbirth):
+				if person[1]==dateofbirth:
+					print student_id,dateofbirth
 					start_student_session(request,student_id)
-					#messages.success(request,"Sucessful Login")
+					messages.success(request,"Sucessful Login")
 					return redirect("student_dashboard")
 		messages.error(request,"Wrong username and/or password")
 		return render(request, 'portal/login.html')
 
 	if teacher_id and password:
+		password=hashlib.sha512(password).hexdigest()
 		query="SELECT teacher_id, password FROM teacher"
 		cur.execute(query)
 		ans=cur.fetchall()
 		for person in ans:
 			if str(person[0])==teacher_id:
-				if person[1]==str(password):
+				if person[1]==password:
 					start_teacher_session(request,teacher_id)
-					#messages.success(request,"Sucessful Login")
+					messages.success(request,"Sucessful Login")
 					return redirect("teacher_dashboard")
 		messages.error(request,"Wrong username and/or password")
 		return render(request, 'portal/login.html')	
@@ -98,7 +99,10 @@ def student_dashboard(request):
 	check=int(check)
 	query="SELECT * FROM student WHERE student_id = ('%d')"%(check)
 	cur.execute(query)
-	ans=cur.fetchall()[0]
+	try:
+		ans=cur.fetchall()[0]
+	except:
+		return redirect("logout")
 	contextdata={}
 	contextdata['student']=ans
 	
@@ -184,10 +188,11 @@ def student_fee(request,pk):
 					'udf2': '', 'udf3': '', 'udf4': '', 'udf5': '', 'udf6': '', 'udf7': '', 
 					'udf8': '', 'udf9': '', 'udf10': '','phone':mobile
 					}
-			#return make_transaction(cleaned_data)
+#			return make_transaction(cleaned_data)
 
 	return render(request, 'portal/studentfee.html',contextdata)
 
+"""
 @csrf_exempt
 def payu_success(request):
     return JsonResponse(request.POST)
@@ -197,6 +202,7 @@ def payu_failure(request):
 @csrf_exempt
 def payu_cancel(request):
     return JsonResponse(request.POST)
+"""
 
 
 def teacher_dashboard(request):
@@ -233,14 +239,23 @@ def teacher_dashboard(request):
 	mother_name=request.POST.get('mother_name')
 	mobile=request.POST.get('mobile')
 	address=request.POST.get('address')
+	password=request.POST.get('password')
 	
 	if name and standard and school and father_name and mother_name and mobile and address and dateofbirth:
 		standard=int(standard)
 		query="insert into student(name,mobile,dateofbirth,address,father_name,mother_name,standard,school) values('%s','%s','%s','%s','%s','%s','%d','%s')"%(name,mobile,dateofbirth,address,father_name,mother_name,standard,school)
+		try:
+			cur.execute(query)
+			db.commit()
+			messages.success(request, "Successfully added")
+		except:
+			messages.error(request, "Enter correct values")
+
+	if password:
+		password=hashlib.sha512(password).hexdigest()
+		query="update teacher set password='%s' where teacher_id='%d' "%(password,check)
 		cur.execute(query)
 		db.commit()
-		#messages.success(request, "Successfully added")
-
 	return render(request, 'portal/teacherdashboard.html',contextdata)
 
 def teacher_attendance(request,pk):
@@ -271,16 +286,19 @@ def teacher_attendance(request,pk):
 	date=request.POST.get('date')
 	if date:
 		date=datetime.datetime.strptime(date, '%Y-%m-%d').date()
-		for i in range(1,len(ans)+1):
-			name=request.POST.get(str(i))
-			if name:
-				print name
-				if name=="Present":
-					query="insert into attendance(student_id, batch_id, dateofclass, record) values ('%d','%d','%s','P')"%(ans[i-1][0],pk,date)
-				else:
-					query="insert into attendance(student_id, batch_id, dateofclass, record) values ('%d','%d','%s','A')"%(ans[i-1][0],pk,date)		
-				cur.execute(query)
-				db.commit()
+		try:
+			for i in range(1,len(ans)+1):
+				name=request.POST.get(str(i))
+				if name:
+					print name
+					if name=="Present":
+						query="insert into attendance(student_id, batch_id, dateofclass, record) values ('%d','%d','%s','P')"%(ans[i-1][0],pk,date)
+					else:
+						query="insert into attendance(student_id, batch_id, dateofclass, record) values ('%d','%d','%s','A')"%(ans[i-1][0],pk,date)						
+					cur.execute(query)
+					db.commit()
+		except:
+			messages.error(request,"Enter correct values")
 	return render(request, 'portal/teacherattendance.html',contextdata)
 
 def teacher_fee(request,pk):
@@ -299,15 +317,21 @@ def teacher_fee(request,pk):
 
 	if payid and amount:
 		query="INSERT into fee(amount,dateofdeposit,student_id,batch_id) values('%d',curdate(),'%d','%d')"%(int(amount),int(payid),pk)
-		cur.execute(query)
-		db.commit()
+		try:
+			cur.execute(query)
+			db.commit()
+			messages.success(request,"Successfull payment done")
+		except:
+			messages.error(request,"Enter correct values")
 	if enrollid:
-		query="INSERT into joins(student_id,batch_id) values ('%d','%d')"%(int(enrollid),check)
-		cur.execute(query)
-		db.commit()
-		query="INSERT into fee(amount,dateofdeposit,student_id,batch_id) values('%d',curdate(),'%d','%d')"%(int(enrollamount),int(enrollid),pk)
-		cur.execute(query)
-		db.commit()
+		try:
+			query="INSERT into joins(student_id,batch_id) values ('%d','%d')"%(int(enrollid),check)
+			cur.execute(query)
+			query="INSERT into fee(amount,dateofdeposit,student_id,batch_id) values('%d',curdate(),'%d','%d')"%(int(enrollamount),int(enrollid),pk)
+			cur.execute(query)
+			db.commit()
+		except:
+			messages.error(request,"Enter correct values")
 	if removeid:
 		query="DELETE from joins where student_id=('%s')"%(int(removeid))
 		cur.execute(query)
@@ -359,15 +383,19 @@ def discussion(request,pk):
 
 	statement=request.POST.get('statement')
 	if statement:
-		query="insert into comment(page_id, statement, name, timedate) values('%d','%s', '%s' , now());"%(pk,statement,contextdata['name'])
-		cur.execute(query)
-		db.commit()
+		query="insert into comment(batch_id, statement, name, timedate) values('%d','%s', '%s' , now());"%(pk,statement,contextdata['name'])
+		try:
+			cur.execute(query)
+			db.commit()
+			messages.success(request,"Successfully posted")
+		except:
+			messages.error(request,"Insert correct values")
 	query="SELECT standard,subject FROM batch where batch_id=('%d') " %(pk)
 	cur.execute(query)
 	ans=cur.fetchall()
 	contextdata['standard']=ans[0][0]
 	contextdata['subject']=ans[0][1]
-	query="SELECT * FROM comment where page_id=('%d') " %(pk)
+	query="SELECT * FROM comment where batch_id=('%d') " %(pk)
 	cur.execute(query)
 	ans=cur.fetchall()
 	contextdata['comment']=ans

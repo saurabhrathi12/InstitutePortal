@@ -3,10 +3,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 import MySQLdb
 import datetime
-
+import hashlib
 def connect():
-	#db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
-	db=MySQLdb.connect(host="rathiclasses.mysql.pythonanywhere-services.com",user="rathiclasses",passwd="qwerty123",db="rathiclasses$institute")
+	db=MySQLdb.connect(host="localhost",user="root",passwd="qwerty123",db="institute")
+	#db=MySQLdb.connect(host="rathiclasses.mysql.pythonanywhere-services.com",user="rathiclasses",passwd="qwerty123",db="rathiclasses$institute")
 	cur=db.cursor()
 	return db,cur
 
@@ -19,7 +19,9 @@ def mlogin(request):
 		if username == "admin":
 			if password == "password":
 				request.session["admin"]="admin"
+				messages.success(request,"Successful Login")
 				return redirect("dashboard")
+		messages.error(request,"Wrong username and/or password")
 	return render(request,'management/mlogin.html')
 
 
@@ -40,8 +42,33 @@ def dashboard(request):
 	if name and standard and school and father_name and mother_name and mobile and address and dateofbirth:
 		standard=int(standard)
 		query="insert into student(name,mobile,dateofbirth,address,father_name,mother_name,standard,school) values('%s','%s','%s','%s','%s','%s','%d','%s')"%(name,mobile,dateofbirth,address,father_name,mother_name,standard,school)
-		cur.execute(query)
-		db.commit()
+		try:
+			cur.execute(query)
+			db.commit()
+			messages.success(request,"Successfully inserted")
+		except:
+			messages.error(request,"Insert correct values")
+
+	student_id=request.POST.get('ustudentid')
+	name=request.POST.get('uname')
+	standard=request.POST.get('ustandard')
+	school=request.POST.get('uschool')
+	dateofbirth=request.POST.get('udateofbirth')
+	father_name=request.POST.get('ufather_name')
+	mother_name=request.POST.get('umother_name')
+	mobile=request.POST.get('umobile')
+	address=request.POST.get('uaddress')
+	if student_id and name and standard and school and father_name and mother_name and mobile and address and dateofbirth:
+		student_id=int(student_id)
+		standard=int(standard)
+		query="update student set name = '%s', standard='%d', school='%s', dateofbirth='%s',father_name='%s',mother_name='%s',mobile='%s',address='%s' where student_id='%d' "%(name,standard,school,dateofbirth,father_name,mother_name,mobile,address,student_id)
+		try:
+			cur.execute(query)
+			db.commit()
+			messages.success(request,"Successfully updated")
+		except:
+			messages.error(request,"Enter correct values")
+
 
 	password=request.POST.get('password2')
 	name=request.POST.get('name2')
@@ -49,17 +76,42 @@ def dashboard(request):
 	date=request.POST.get('dateofbirth2')
 	address=request.POST.get('address2')
 	if password and name and mobile and date and address:
+		password=hashlib.sha512(password).hexdigest()
 		date=datetime.datetime.strptime(date, '%Y-%m-%d').date()
 		query="insert into teacher(password, name, mobile, dateofbirth, address) values('%s','%s','%s','%s','%s')"%(password,name,mobile,date,address)
-		cur.execute(query)
-		db.commit()
+		try:
+			cur.execute(query)
+			db.commit()
+			messages.success(request,"Successfully inserted")
+		except:
+			messages.error(request,"Insert correct values")
+
+	teacher_id=request.POST.get('utid')
+	name=request.POST.get('uname2')
+	mobile=request.POST.get('umobile2')
+	date=request.POST.get('udateofbirth2')
+	address=request.POST.get('uaddress2')
+	if teacher_id and name and mobile and date and address:
+		teacher_id=int(teacher_id)
+		date=datetime.datetime.strptime(date, '%Y-%m-%d').date()
+		query="update teacher set name='%s', mobile='%s', dateofbirth='%s', address='%s' where teacher_id='%d' "%(name,mobile,date,address,teacher_id)
+		try:
+			cur.execute(query)
+			db.commit()
+			messages.success(request,"Successfully updated")
+		except:
+			messages.error(request,"Enter correct values")
 
 	name=request.POST.get('name3')
 	capacity=request.POST.get('capacity3')
 	if name and capacity:
 		query="insert into classroom(hall_name,capacity) values('%s','%d')"%(name,int(capacity))
-		cur.execute(query)
-		db.commit()		
+		try:
+			cur.execute(query)
+			db.commit()
+			messages.success(request,"Successfully inserted")
+		except:
+			messages.error(request,"Insert correct values")
 
 	standard=request.POST.get('standard4')
 	subject=request.POST.get('subject4')
@@ -68,8 +120,12 @@ def dashboard(request):
 	room_id=request.POST.get('roomid4')
 	if standard and subject and fee and teacher_id and room_id:
 		query="insert into batch(standard, subject, teacher_id, room_id, fee) values('%d', '%s', '%d', '%d', '%d')"%(int(standard), subject, int(teacher_id), int(room_id), int(fee)) 
-		cur.execute(query)
-		db.commit()
+		try:
+			cur.execute(query)
+			db.commit()
+			messages.success(request,"Successfully inserted")
+		except:
+			messages.error(request,"Insert correct values")
 
 	day=request.POST.get('day5')
 	start_time=request.POST.get('start5')
@@ -78,8 +134,12 @@ def dashboard(request):
 		start_time=float(start_time)
 		end_time=float(end_time)
 		query="insert into time_slot(day, start_time, end_time) values('%s','%f','%f')"%(day, start_time, end_time)
-		cur.execute(query)
-		db.commit()
+		try:
+			cur.execute(query)
+			db.commit()
+			messages.success(request,"Successfully inserted")
+		except:
+			messages.error(request,"Insert correct values")
 
 	student_id=request.POST.get('studentid6')
 	batch_id=request.POST.get('batchid6')
@@ -88,19 +148,26 @@ def dashboard(request):
 		student_id=int(student_id)
 		batch_id=int(batch_id)
 		fee=int(fee)
-		query="insert into joins(student_id, batch_id) values('%d','%d')"%(student_id,batch_id)
-		cur.execute(query)
-		db.commit()
-		query="INSERT into fee(amount,dateofdeposit,student_id,batch_id) values('%d',curdate(),'%d','%d')"%(fee,student_id,batch_id)
-		cur.execute(query)
-		db.commit()
+		try:
+			query="insert into joins(student_id, batch_id) values('%d','%d')"%(student_id,batch_id)
+			cur.execute(query)
+			query="INSERT into fee(amount,dateofdeposit,student_id,batch_id) values('%d',curdate(),'%d','%d')"%(fee,student_id,batch_id)
+			cur.execute(query)
+			db.commit()
+			messages.success(request,"Successfully inserted")
+		except:
+			messages.error(request,"Insert correct values")
 
 	batch_id=request.POST.get('batchid7')
 	timeslot_id=request.POST.get('timeslotid7')
 	if batch_id and timeslot_id:
 		query="insert into batch_timeslot(batch_id,timeslot_id) values('%d','%d')"%(int(batch_id),int(timeslot_id))
-		cur.execute(query)
-		db.commit()
+		try:
+			cur.execute(query)
+			db.commit()
+			messages.success(request,"Successfully inserted")
+		except:
+			messages.error(request,"Insert correct values")
 
 
 	query="SELECT * FROM student"
@@ -111,6 +178,10 @@ def dashboard(request):
 	query="SELECT * FROM teacher"
 	cur.execute(query)
 	ans=cur.fetchall()
+	ans=list(ans)
+	for i in range(len(ans)):
+		ans[i]=list(ans[i])
+		ans[i].append(str(ans[i][4]))
 	contextdata['teacher']=ans
 
 	query="SELECT * FROM classroom"
@@ -143,13 +214,12 @@ def dashboard(request):
 	ans=cur.fetchall()
 	contextdata['attendance']=ans
 
-	#query="select receipt_id,batch.batch_id,student.student_id,name,standard,subject,dateofdeposit,amount from fee natural join student natural join batch order by batch_id,student_id,dateofdeposit"
 	query="select receipt_id,batch.batch_id,student.student_id,name,batch.standard,subject,dateofdeposit,amount from fee,student,batch where fee.student_id=student.student_id and fee.batch_id=batch.batch_id order by batch_id,student_id,dateofdeposit"
 	cur.execute(query)
 	ans=cur.fetchall()
 	contextdata['fee']=ans	
 
-	query="select comment_id,batch.batch_id,standard,subject,name,statement,timedate from comment natural join discussion_page natural join batch order by batch_id,timedate"
+	query="select comment_id,batch.batch_id,standard,subject,name,statement,timedate from comment natural join batch order by batch_id,timedate"
 	cur.execute(query)
 	ans=cur.fetchall()
 	contextdata['comment']=ans	
