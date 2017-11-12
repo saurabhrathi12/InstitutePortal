@@ -15,35 +15,55 @@ def connect():
 	cur=db.cursor()
 	return db,cur
 
-def start_student_session(request, user_id):
+def start_student_session(request, user_id,dateofbirth):
 	request.session["user_mail_id"] = user_id
 	request.session["student"] = user_id
+	request.session["dateofbirth"]=dateofbirth
 	return request
 
-def start_teacher_session(request, user_id):
+def start_teacher_session(request, user_id,password):
 	request.session["user_mail_id"] = user_id
 	request.session["teacher"] = user_id
+	request.session["password"]= password
 	return request
 
 def check_if_auth_student(request):
-	if request.session.has_key("user_mail_id") and request.session.has_key("student"):
-		return request.session["user_mail_id"]
-	else:
-		return None
+	if request.session.has_key("user_mail_id") and request.session.has_key("student") and request.session.has_key("dateofbirth"):
+		db,cur=connect()
+		query="SELECT dateofbirth FROM student WHERE student_id = ('%d')"%(int(request.session["student"]))
+		cur.execute(query)
+		try:
+			ans=cur.fetchall()[0]
+		except:
+			return None
+		if str(ans[0])==request.session["dateofbirth"]:
+			return request.session["user_mail_id"]
+	return None
 
 def check_if_auth_teacher(request):
-	if request.session.has_key("user_mail_id") and request.session.has_key("teacher"):
-		return request.session["user_mail_id"]
-	else:
-		return None
+	if request.session.has_key("user_mail_id") and request.session.has_key("teacher") and request.session.has_key("password"):
+		db,cur=connect()
+		query="SELECT password FROM teacher WHERE teacher_id = ('%d')"%(int(request.session["teacher"]))
+		cur.execute(query)
+		try:
+			ans=cur.fetchall()[0]
+		except:
+			return None
+		if str(ans[0])==request.session["password"]:
+			return request.session["user_mail_id"]
+	return None
 
 def stop_user_session(request):
 	if request.session.has_key("user_mail_id"):
 		del request.session["user_mail_id"]
 		if request.session.has_key("student"):
 			del request.session["student"]
+			if request.session.has_key("dateofbirth"):
+				del request.session["dateofbirth"]
 		if request.session.has_key("teacher"):
 			del request.session["teacher"]
+			if request.session.has_key("password"):
+				del request.session["password"]
 		return True
 	return False
 
@@ -58,14 +78,20 @@ def login(request):
 	teacher_id=request.POST.get('teacher_id')
 	password=request.POST.get('password')
 	if student_id and dateofbirth:
+		d=dateofbirth
+		dateofbirth=d[4]+d[5]+d[6]+d[7]+'-'+d[2]+d[3]+'-'+d[0]+d[1]
 		query="SELECT student_id, dateofbirth FROM student"
 		cur.execute(query)
 		ans=cur.fetchall()
+		ans=list(ans)
+		for i in range(len(ans)):
+			ans[i]=list(ans[i])
+			ans[i][1]=str(ans[i][1])
 		for person in ans:
 			if str(person[0])==student_id:
 				if person[1]==dateofbirth:
 					print student_id,dateofbirth
-					start_student_session(request,student_id)
+					start_student_session(request,student_id,dateofbirth)
 					messages.success(request,"Sucessful Login")
 					return redirect("student_dashboard")
 		messages.error(request,"Wrong username and/or password")
@@ -79,7 +105,7 @@ def login(request):
 		for person in ans:
 			if str(person[0])==teacher_id:
 				if person[1]==password:
-					start_teacher_session(request,teacher_id)
+					start_teacher_session(request,teacher_id,password)
 					messages.success(request,"Sucessful Login")
 					return redirect("teacher_dashboard")
 		messages.error(request,"Wrong username and/or password")
@@ -243,6 +269,7 @@ def teacher_dashboard(request):
 	
 	if name and standard and school and father_name and mother_name and mobile and address and dateofbirth:
 		standard=int(standard)
+		dateofbirth=datetime.datetime.strptime(dateofbirth, '%Y-%m-%d').date()
 		query="insert into student(name,mobile,dateofbirth,address,father_name,mother_name,standard,school) values('%s','%s','%s','%s','%s','%s','%d','%s')"%(name,mobile,dateofbirth,address,father_name,mother_name,standard,school)
 		try:
 			cur.execute(query)
@@ -256,6 +283,8 @@ def teacher_dashboard(request):
 		query="update teacher set password='%s' where teacher_id='%d' "%(password,check)
 		cur.execute(query)
 		db.commit()
+		del request.session["password"]
+		request.session["password"]=password
 	return render(request, 'portal/teacherdashboard.html',contextdata)
 
 def teacher_attendance(request,pk):

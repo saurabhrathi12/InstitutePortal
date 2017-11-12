@@ -24,7 +24,7 @@
 					<input type="text" name="name" class="form-control" placeholder="Name" required>
 					<input type="number" name="standard" class="form-control" placeholder="Class" required>
 					<input type="text" name="school" class="form-control" placeholder="School" required>
-					<input type="number" name="dateofbirth" class="form-control" placeholder="DateOfBirth(DDMMYYYY)" required>
+					<input type="date" name="dateofbirth" class="form-control" placeholder="DateOfBirth(DDMMYYYY)" required>
 					<input type="text" name="father_name" class="form-control" placeholder="Father's Name" required>
 					<input type="text" name="mother_name" class="form-control" placeholder="Mother's Name" required>
 					<input type="number" name="mobile" class="form-control" placeholder="Mobile" required>
@@ -102,7 +102,7 @@
                           <div class="form-group">
                             <label class="control-label col-sm-3">DOB:</label>
                             <div class="col-sm-9">
-                              <input type="number" name="udateofbirth" class="form-control" value="{{row.3}}" required>
+                              <input type="date" name="udateofbirth" class="form-control" value="{{row.9}}" required>
                             </div>
                           </div>
                           <div class="form-group">
@@ -192,6 +192,7 @@
               <th>Address</th>
               <th></th>
               <th></th>
+              <th></th>
               </tr>
           </thead>
           <tbody>
@@ -203,6 +204,34 @@
               <td>{{row.3}}</td>
               <td>{{row.4}}</td>
               <td>{{row.5}}</td>
+              <td>
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#up{{row.0}}"> Change Password</button>
+                <div class="modal fade" id="up{{row.0}}" role="dialog">
+                  <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Change Password</h4>
+                    </div>
+                    <div class="modal-body">
+                    <form class="form-signin" role="form" action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+                      <div class="form-group">
+                        <label class="control-label col-sm-3">Teacher Id:</label>
+                        <div class="col-sm-9">
+                          <input type="number" name="utid2" class="form-control" value="{{row.0}}" readonly>
+                        </div>
+                      </div>
+                      <input type="password" name="upassword2" class="form-control" placeholder="Password" required>
+                      <button class="btn btn-lg btn-primary btn-block" type="submit">Change</button>
+                    </form>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </td>
               <td>
               <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ut{{row.0}}">Update</button>
                 <div class="modal fade" id="ut{{row.0}}" role="dialog">

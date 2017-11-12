@@ -41,6 +41,7 @@ def dashboard(request):
 	address=request.POST.get('address')	
 	if name and standard and school and father_name and mother_name and mobile and address and dateofbirth:
 		standard=int(standard)
+		dateofbirth=datetime.datetime.strptime(dateofbirth, '%Y-%m-%d').date()
 		query="insert into student(name,mobile,dateofbirth,address,father_name,mother_name,standard,school) values('%s','%s','%s','%s','%s','%s','%d','%s')"%(name,mobile,dateofbirth,address,father_name,mother_name,standard,school)
 		try:
 			cur.execute(query)
@@ -61,6 +62,7 @@ def dashboard(request):
 	if student_id and name and standard and school and father_name and mother_name and mobile and address and dateofbirth:
 		student_id=int(student_id)
 		standard=int(standard)
+		dateofbirth=datetime.datetime.strptime(dateofbirth, '%Y-%m-%d').date()
 		query="update student set name = '%s', standard='%d', school='%s', dateofbirth='%s',father_name='%s',mother_name='%s',mobile='%s',address='%s' where student_id='%d' "%(name,standard,school,dateofbirth,father_name,mother_name,mobile,address,student_id)
 		try:
 			cur.execute(query)
@@ -85,6 +87,14 @@ def dashboard(request):
 			messages.success(request,"Successfully inserted")
 		except:
 			messages.error(request,"Insert correct values")
+
+	teacher_id=request.POST.get('utid2')
+	password=request.POST.get('upassword2')
+	if password:
+		password=hashlib.sha512(password).hexdigest()
+		query="update teacher set password='%s' where teacher_id='%d' "%(password,int(teacher_id))
+		cur.execute(query)
+		db.commit()
 
 	teacher_id=request.POST.get('utid')
 	name=request.POST.get('uname2')
@@ -173,6 +183,10 @@ def dashboard(request):
 	query="SELECT * FROM student"
 	cur.execute(query)
 	ans=cur.fetchall()
+	ans=list(ans)
+	for i in range(len(ans)):
+		ans[i]=list(ans[i])
+		ans[i].append(str(ans[i][3]))
 	contextdata['student']=ans
 
 	query="SELECT * FROM teacher"
