@@ -16,8 +16,13 @@ def mlogin(request):
 	username=request.POST.get('username')
 	password=request.POST.get('password')
 	if username and password:
-		if username == "admin":
-			if password == "password":
+		db,cur=connect()
+		query="select * from admin"
+		cur.execute(query)
+		ans=cur.fetchall()
+		password=hashlib.sha512(password).hexdigest()
+		for i in range(len(ans)):
+			if ans[i][0]==username and ans[i][1]==password:
 				request.session["admin"]="admin"
 				messages.success(request,"Successful Login")
 				return redirect("dashboard")

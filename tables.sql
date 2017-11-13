@@ -1,6 +1,15 @@
-drop database institute;
-create database institute;
-use institute;
+drop table if exists student;
+drop table if exists teacher;
+drop table if exists classroom;
+drop table if exists batch;
+drop table if exists time_slot;
+drop table if exists batch_timeslot;
+drop table if exists joins;
+drop table if exists comment;
+drop table if exists attendance;
+drop table if exists fee;
+drop table if exists admin;
+
 create table student(student_id int not null auto_increment primary key, name char(100) not null, mobile char(10) not null, dateofbirth date not null, address char(100) not null, father_name char(100) not null, mother_name char(100) not null, standard int not null, school char(100) not null);
 create table teacher(teacher_id int not null auto_increment primary key, password char(130) not null, name char(100) not null, mobile char(10) not null, dateofbirth date not null, address char(100) not null);
 create table classroom(room_id int not null auto_increment primary key, hall_name char(100) not null, capacity int not null);
@@ -11,7 +20,7 @@ create table joins(student_id int not null, foreign key (student_id) references 
 create table comment(comment_id int not null auto_increment primary key, batch_id int not null, foreign key (batch_id) references batch(batch_id) on delete cascade, statement text not null, name char(100) not null, timedate datetime not null);
 create table attendance(student_id int not null, batch_id int not null, foreign key (student_id,batch_id) references joins(student_id,batch_id) on delete cascade, dateofclass date not null, record char(1) not null, primary key(student_id, batch_id, dateofclass));
 create table fee(receipt_id int not null auto_increment primary key, amount int not null, dateofdeposit date not null, student_id int not null, batch_id int not null, foreign key (student_id,batch_id) references joins(student_id,batch_id) on delete cascade);
-
+create table admin(username char(100) not null, password char(130) not null);
 
 insert into student(name,mobile,dateofbirth,address,father_name,mother_name,standard,school) values('Saurabh Rathi','9657965513','1997-08-24','Shivaji Colony','Bhagirath','Sarla',10,'Saint Paul');
 insert into teacher(password, name, mobile, dateofbirth, address) values('6cb52b86f3a58e82aa9a79ef12267e422e20513693783265ff080445f73e6b2c2c04f402ba025240a4437270dee64347af73a264e6b8708509dad69296421cd0', 'Bhagirath', '1234', '1963-11-19', 'shivaji');
@@ -23,6 +32,7 @@ insert into batch_timeslot(batch_id,timeslot_id) values(1,1);
 insert into attendance(student_id, batch_id, dateofclass, record) values (1,1,'2017-07-25','A');
 insert into fee(amount,dateofdeposit,student_id,batch_id) values(200, '2017-07-01',1,1);
 insert into comment(batch_id, statement, name, timedate) values(1,'Why speed of light is 3*10^8 m/s', 'Saurabh Rathi' , now());
+insert into admin values('admin','b109f3bbbc244eb82441917ed06d618b9008dd09b3befd1b5e07394c706a8bb980b1d7785e5976ec049b46df5f1326af5a2ea6d103fd07c95385ffab0cacbc86');
 
 insert into time_slot(day, start_time, end_time) values('TUE',8,9);
 insert into time_slot(day, start_time, end_time) values('WED',8,9);
