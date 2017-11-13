@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'portal',
     'management',
-#    'payu_biz',
 ]
 
 MIDDLEWARE = [
@@ -122,15 +121,3 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-"""
-PAYMENT_MODE = "production"
-MERCHANT_KEY = "xxxxxxxx"
-MERCHANT_SALT = "xxxxxxxx"
-SUCCESS_URL = "www.example.com/success/"
-FAILURE_URL = "www.example.com/failure/"
-CANCEL_URL = "www.example.com/cancel/"
-SUCCESS_URL = "http://127.0.0.1:8000/payu-success/"
-FAILURE_URL = "http://127.0.0.1:8000/payu-failure/"
-CANCEL_URL = "http://127.0.0.1:8000/payu-cancel/"
-"""

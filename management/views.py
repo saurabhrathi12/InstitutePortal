@@ -48,7 +48,7 @@ def dashboard(request):
 			db.commit()
 			messages.success(request,"Successfully inserted")
 		except:
-			messages.error(request,"Insert correct values")
+			messages.error(request,"Enter correct values")
 
 	student_id=request.POST.get('ustudentid')
 	name=request.POST.get('uname')
@@ -86,7 +86,7 @@ def dashboard(request):
 			db.commit()
 			messages.success(request,"Successfully inserted")
 		except:
-			messages.error(request,"Insert correct values")
+			messages.error(request,"Enter correct values")
 
 	teacher_id=request.POST.get('utid2')
 	password=request.POST.get('upassword2')
@@ -121,7 +121,7 @@ def dashboard(request):
 			db.commit()
 			messages.success(request,"Successfully inserted")
 		except:
-			messages.error(request,"Insert correct values")
+			messages.error(request,"Enter correct values")
 
 	standard=request.POST.get('standard4')
 	subject=request.POST.get('subject4')
@@ -135,7 +135,7 @@ def dashboard(request):
 			db.commit()
 			messages.success(request,"Successfully inserted")
 		except:
-			messages.error(request,"Insert correct values")
+			messages.error(request,"Enter correct values")
 
 	day=request.POST.get('day5')
 	start_time=request.POST.get('start5')
@@ -149,7 +149,7 @@ def dashboard(request):
 			db.commit()
 			messages.success(request,"Successfully inserted")
 		except:
-			messages.error(request,"Insert correct values")
+			messages.error(request,"Enter correct values")
 
 	student_id=request.POST.get('studentid6')
 	batch_id=request.POST.get('batchid6')
@@ -166,7 +166,7 @@ def dashboard(request):
 			db.commit()
 			messages.success(request,"Successfully inserted")
 		except:
-			messages.error(request,"Insert correct values")
+			messages.error(request,"Enter correct values")
 
 	batch_id=request.POST.get('batchid7')
 	timeslot_id=request.POST.get('timeslotid7')
@@ -177,7 +177,7 @@ def dashboard(request):
 			db.commit()
 			messages.success(request,"Successfully inserted")
 		except:
-			messages.error(request,"Insert correct values")
+			messages.error(request,"Enter correct values")
 
 
 	query="SELECT * FROM student"

@@ -11,7 +11,6 @@ urlpatterns = [
 	url(r'^teacher_fee/(?P<pk>\d+)/$', views.teacher_fee, name='teacher_fee'),
 	url(r'^discussion/(?P<pk>\d+)/$', views.discussion, name='discussion'),
 	url(r'^logout$', views.logout, name='logout'),
-#	url(r'^payu-success/$', views.payu_success, name='payu_success'),
-#	url(r'^payu-failure/$', views.payu_failure, name='payu_failure'),
-#	url(r'^payu-cancel/$', views.payu_cancel, name='payu_cancel'),
+	url(r'^success$', views.success, name='success'),
+	url(r'^failure$', views.failure, name='failure'),
 ]
