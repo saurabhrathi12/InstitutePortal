@@ -11,7 +11,7 @@
 	 	<div class="col-sm-2">	 	</div>
 	 	<div class="col-sm-8">
       <h2 class="sub-header"><center>Batch: {{standard}}th {{subject}}</center></h2>
-      <form role="form" action="{% url 'teacher_attendance' pk=id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+      <form role="form" action="{% url 'teacher_attendance' pk=batch_id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
       <label for="date">Date of Attendance (DDMMYYYY)</label>
       <input type="date" name="date" class="form-control" required autofocus>
       <div class="table-responsive">

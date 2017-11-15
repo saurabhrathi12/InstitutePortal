@@ -93,7 +93,6 @@ def login(request):
 		for person in ans:
 			if str(person[0])==student_id:
 				if person[1]==dateofbirth:
-					print student_id,dateofbirth
 					start_student_session(request,student_id,dateofbirth)
 					messages.success(request,"Sucessful Login")
 					return redirect("student_dashboard")
@@ -231,9 +230,7 @@ def student_fee(request,pk):
 			hash_string+=''
 		hash_string+='|'
 	hash_string+=SALT
-	print "woo",hash_string,"woo"
 	hashh=hashlib.sha512(hash_string).hexdigest().lower()
-	print "hii",hashh
 	action =PAYU_BASE_URL
 	if posted.get("email")!=None and posted.get("amount")!=None and posted.get("phone")!=None:
 		return render_to_response('portal/current_datetime.html',{"posted":posted,"hashh":hashh,"MERCHANT_KEY":MERCHANT_KEY,"txnid":txnid,"hash_string":hash_string,"action":"https://secure.payu.in/_payment" })
@@ -244,7 +241,10 @@ def student_fee(request,pk):
 def success(request):
 	c = {}
 	c.update(csrf(request))
-	status=request.POST["status"]
+	try:
+		status=request.POST["status"]
+	except:
+		return redirect(login)
 	firstname=request.POST["firstname"]
 	amount=request.POST["amount"]
 	txnid=request.POST["txnid"]
@@ -266,7 +266,7 @@ def success(request):
 		print "Your Transaction ID for this transaction is ",txnid
 		print "We have received a payment of Rs. ", amount ,". Your order will soon be shipped."
 	db,cur=connect()
-	query="INSERT into fee(amount,dateofdeposit,student_id,batch_id) values('%d',curdate(),'%d','%d')"%(int(amount),int(firstname),int(productinfo))
+	query="INSERT into fee(amount,dateofdeposit,student_id,batch_id) values('%d',curdate(),'%d','%d')"%(int(float(amount)),int(firstname),int(productinfo))
 	cur.execute(query)
 	db.commit()
 	return render_to_response('portal/success.html',RequestContext(request,{"txnid":txnid,"status":status,"amount":amount}))
@@ -277,7 +277,10 @@ def success(request):
 def failure(request):
 	c = {}
 	c.update(csrf(request))
-	status=request.POST["status"]
+	try:
+		status=request.POST["status"]
+	except:
+		return redirect(login)
 	firstname=request.POST["firstname"]
 	amount=request.POST["amount"]
 	txnid=request.POST["txnid"]
@@ -371,6 +374,7 @@ def teacher_attendance(request,pk):
 	contextdata={}
 	contextdata['teacher']=ans
 	contextdata['id']=check
+	contextdata['batch_id']=pk
 
 	query="SELECT standard,subject FROM batch where batch_id=('%d') " %(pk)
 	cur.execute(query)
@@ -389,15 +393,14 @@ def teacher_attendance(request,pk):
 			for i in range(1,len(ans)+1):
 				name=request.POST.get(str(i))
 				if name:
-					print name
 					if name=="Present":
 						query="insert into attendance(student_id, batch_id, dateofclass, record) values ('%d','%d','%s','P')"%(ans[i-1][0],pk,date)
 					else:
 						query="insert into attendance(student_id, batch_id, dateofclass, record) values ('%d','%d','%s','A')"%(ans[i-1][0],pk,date)						
 					cur.execute(query)
-					db.commit()
+			db.commit()
 		except:
-			messages.error(request,"Enter correct values")
+			messages.error(request,"Values already entered for the date")
 	return render(request, 'portal/teacherattendance.html',contextdata)
 
 def teacher_fee(request,pk):
@@ -408,6 +411,7 @@ def teacher_fee(request,pk):
 	check=int(check)
 	pk=int(pk)
 
+	
 	payid=request.POST.get('payid')
 	amount=request.POST.get('amount')
 	enrollid=request.POST.get('enrollid')
@@ -422,9 +426,9 @@ def teacher_fee(request,pk):
 			messages.success(request,"Successfull payment done")
 		except:
 			messages.error(request,"Enter correct values")
-	if enrollid:
+	if enrollid and enrollamount:
 		try:
-			query="INSERT into joins(student_id,batch_id) values ('%d','%d')"%(int(enrollid),check)
+			query="INSERT into joins(student_id,batch_id) values ('%d','%d')"%(int(enrollid),pk)
 			cur.execute(query)
 			query="INSERT into fee(amount,dateofdeposit,student_id,batch_id) values('%d',curdate(),'%d','%d')"%(int(enrollamount),int(enrollid),pk)
 			cur.execute(query)
@@ -432,10 +436,7 @@ def teacher_fee(request,pk):
 		except:
 			messages.error(request,"Enter correct values")
 	if removeid:
-		query="DELETE from joins where student_id=('%s')"%(int(removeid))
-		cur.execute(query)
-		db.commit()
-		query="DELETE from fee where student_id=('%s') and batch_id=('%d')"%(int(removeid),pk)
+		query="DELETE from joins where student_id=('%d') and batch_id=('%d')"%(int(removeid),pk)
 		cur.execute(query)
 		db.commit()
 
@@ -445,6 +446,7 @@ def teacher_fee(request,pk):
 	contextdata={}
 	contextdata['id']=check
 	contextdata['teacher']=ans
+	contextdata['batch_id']=pk
 	query="SELECT standard,subject,fee FROM batch where batch_id=('%d') " %(pk)
 	cur.execute(query)
 	ans=cur.fetchall()

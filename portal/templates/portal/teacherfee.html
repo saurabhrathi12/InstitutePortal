@@ -50,9 +50,9 @@
             <h4 class="modal-title">Receive Fee Payment</h4>
           </div>
           <div class="modal-body">
-            <form class="form-signin" role="form" action="{% url 'teacher_fee' pk=id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+            <form class="form-signin" role="form" action="{% url 'teacher_fee' pk=batch_id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
               <input type="number" name="payid" class="form-control" placeholder="Student Roll No" required>
-              <input type="number" name="amount" class="form-control" placeholder="Amount" required>
+              <input type="number" name="amount" min="1" class="form-control" placeholder="Amount" required>
               <button class="btn btn-lg btn-primary btn-block" type="submit">Update</button>
             </form>
           </div>
@@ -72,9 +72,9 @@
             <h4 class="modal-title">Enroll Student</h4>
           </div>
           <div class="modal-body">
-            <form class="form-signin" role="form" action="{% url 'teacher_fee' pk=id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+            <form class="form-signin" role="form" action="{% url 'teacher_fee' pk=batch_id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
               <input type="number" name="enrollid" class="form-control" placeholder="Student Roll No" required>
-              <input type="number" name="enrollamount" class="form-control" placeholder="Amount" required>
+              <input type="number" name="enrollamount" min="1" class="form-control" placeholder="Amount" required>
               <button class="btn btn-lg btn-primary btn-block" type="submit">Enroll</button>
             </form>
           </div>
@@ -94,7 +94,7 @@
             <h4 class="modal-title">Remove Student</h4>
           </div>
           <div class="modal-body">
-            <form class="form-signin" role="form" action="{% url 'teacher_fee' pk=id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+            <form class="form-signin" role="form" action="{% url 'teacher_fee' pk=batch_id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
               <input type="number" name="removeid" class="form-control" placeholder="Student Roll No" required>
               <button class="btn btn-lg btn-primary btn-block" type="submit">Remove</button>
             </form>
